@@ -1,32 +1,29 @@
-import React from 'react'
-import axios from 'axios';
-import { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 
-const BASE_URL = "http://localhost:5001"
-const PATH = "dogs"
+/**
+ * Show details on single dog
+ *
+ * Props:
+ * - dogs: [{name, age src, facts}, ...]
+ */
 
-const DogDetails = () => {
-  const [ dog, setDog ] = useState({});
+function DogDetails({ dogs }) {
   const { name } = useParams();
-
-  async function getDog(name) {
-    const response = await axios.get(`${BASE_URL}/${PATH}`)
-    const dogData = response.data.filter(dog => {
-      return dog.name === name;
-    });
-
-    // setDog(dogData);
-  }
-
-  //Note: ask about this, is this correct way to handle calling async??
-  getDog(name);
-  console.log(dog)
-
+  const dog = (dogs.filter(d => name === d.src))[0];
 
   return (
-    <div>DogDetails</div>
-  )
+    <div>
+      <p>Name: {dog.name}</p>
+      <p>Age: {dog.age}</p>
+      <p>Facts:
+        <ul>
+          {dog.facts.map(f => (<li>{f}</li>))}
+        </ul>
+      </p>
+      <img src={`/${dog.src}.jpg`} alt={dog.name}/>
+    </div>
+  );
 }
 
-export default DogDetails
+export default DogDetails;
